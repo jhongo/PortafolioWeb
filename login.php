@@ -1,10 +1,18 @@
 <?php
-    
+    session_start();
+
+    $txtName = 'jhongo';
+
+    if ($_SESSION['user'] == 'jhongo') {
+        header('location:index.php');
+        }
+
     if ($_POST) {
 
-        if ( ($_POST['user'] =='jhongo') && ($_POST['password']=='jhon2205')) {
-        // echo 'Login successful';
 
+        if ( ($_POST['user'] ==$txtName) && ($_POST['password']=='jhon2205')) {
+        // echo 'Login successful';
+        $_SESSION['user'] = $txtName;
         header('location:index.php');
 
         }else{
