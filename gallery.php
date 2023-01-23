@@ -1,11 +1,28 @@
 <?php include('header.php') ?>
+<?php include('connection.php')?>
+
+
+<?php
+
+    //* Instancia de clase connection
+$objconnection = new connection;
+
+$sql = 'INSERT INTO project(project_name, project_image, project_description) VALUES(  ) ';
+$objconnection->executeSentences($sql);
+
+
+
+
+?>
+
+
 
 <div class=" w-full p-12 ">
 
     <div class="grid grid-cols-2 ">
 
         <div class="w-2/3  ">
-            <form action="" method="post" class="bg-gray-200 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <form action="gallery.php" method="post" class="bg-gray-200 shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <label class="block text-gray-800 text-sm font-bold mb-2 text-3xl" for="username">
                     Data of project
                 </label>
