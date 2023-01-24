@@ -27,7 +27,7 @@
     public function executeSentences($sql){
         $sentence =$this->connection->prepare($sql);
         $sentence->execute();
-        return $res = $sentence->fetchAll();
+        return $sentence->fetchAll();
     }
         
     }

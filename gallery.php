@@ -1,31 +1,57 @@
-<?php include('header.php') ?>
+<?php
+
+use function PHPSTORM_META\map;
+
+ include('header.php') ?>
 <?php include('connection.php')?>
 
 
 <?php
 
+    //Delete data 
 
-$objconnection = new connection;
-$sqlSelect = "SELECT * FROM `project`";
-$res = $objconnection->executeSentences($sqlSelect);
-//  foreach ($res as $pro) {
-//     print_r($pro['project_name']);
-// }
+if ($_GET) {
+    $objconnection = new connection;
+    $id = $_GET['delete'];
 
- if ($_POST) {
+    $image = $objconnection->executeSentences("SELECT project_image FROM project WHERE id=$id" );
 
-     $txtNameProject= $_POST['nameProject'];
-     $txtImageProject='auth-google.jpg';
-     $txtDescriptionProject= $_POST['descriptionProject'];
-     
-         //* Instancia de clase connection
-  
-        //? QUERY INSERT DATA IN DB
-     $sqlInsert = "INSERT INTO project(project_name, project_image, project_description) VALUES('$txtNameProject',' $txtImageProject','$txtDescriptionProject') ";
+    unlink("images/".$image[0]['imagen']);
+
+    $sqlDelete = "DELETE FROM project WHERE id=$id";
+    $objconnection->execSentences($sqlDelete);
+    
+}
+
+    //Create new project
+if ($_POST) {
+
+    $fecha = new DateTime();
+    
+    $txtNameProject= $_POST['nameProject'];
+    $fileImageProject=$fecha->getTimestamp()."_".$_FILES['fileImage']['name'];
+    $txtDescriptionProject= $_POST['descriptionProject'];
+
+    //Recibimos la imagen de forma provicional
+    $imageTemporal = $_FILES['fileImage']['tmp_name'];
+
+    move_uploaded_file($imageTemporal,"images/".$fileImageProject);
+    
+    //* Instancia de clase connection
+    
+    //? QUERY INSERT DATA IN DB
+    $objconnection = new connection;
+     $sqlInsert = "INSERT INTO project(project_name, project_image, project_description) VALUES('$txtNameProject',' $fileImageProject','$txtDescriptionProject') ";
      $objconnection->execSentences($sqlInsert);
 
 
 }
+
+
+    //GET ALL DATA OF THE DATABASE
+$objconnection = new connection;
+$sqlSelect = "SELECT * FROM `project`";
+$res = $objconnection->executeSentences($sqlSelect);
 
 
 
@@ -56,21 +82,10 @@ $res = $objconnection->executeSentences($sqlSelect);
                 <textarea id="message" name="descriptionProject" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your description here..."></textarea>
 
                 
-                <label class="block text-gray-500 text-sm font-bold mb-2" for="username">
-                    Image project
-                </label>
-                <div class="flex items-center justify-center w-full">
-                    <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                            </svg>
-                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                        </div>
-                        <input id="dropzone-file" type="file" class="hidden" />
-                    </label>
-                </div>
+
+                    <label class="block mb-2 text-sm font-medium mt-2 text-gray-900 dark:text-GRAY-800" for="file_input">Cargar imagen</label>
+                    <input name="fileImage" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
+
 
                 <div class="flex items-center justify-between mt-2 ">
                     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
@@ -92,7 +107,13 @@ $res = $objconnection->executeSentences($sqlSelect);
                             Name
                         </th>
                         <th scope="col" class="px-6 py-3">
+                            Description
+                        </th>
+                        <th scope="col" class="px-6 py-3">
                             Image
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Action
                         </th>
                     </tr>
                 </thead>
@@ -107,10 +128,13 @@ $res = $objconnection->executeSentences($sqlSelect);
                         <?php echo($project['project_name']) ?>
                     </td>
                     <td class="px-6 py-4">
+                        <?php echo($project['project_description']) ?>
+                    </td>
+                    <td class="px-6 py-4">
                         <?php echo($project['project_image']) ?>
                     </td>
                     <td class="px-6 py-4 text-right">
-                        <a href="#" class="font-medium text-blue-600 dark:text-green-600 hover:underline">Edit</a>
+                        <a href="?delete=<?php echo( $project['id']); ?>" class="font-medium text-blue-600 dark:text-green-600 hover:underline">Delete</a>
                     </td>
                 </tr>
                 <?php } ?>
