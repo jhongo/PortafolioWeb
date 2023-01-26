@@ -8,21 +8,6 @@ use function PHPSTORM_META\map;
 
 <?php
 
-    //Delete data 
-
-if ($_GET) {
-    $objconnection = new connection;
-    $id = $_GET['delete'];
-
-    $image = $objconnection->executeSentences("SELECT project_image FROM project WHERE id=$id" );
-
-    unlink("images/".$image[0]['imagen']);
-
-    $sqlDelete = "DELETE FROM project WHERE id=$id";
-    $objconnection->execSentences($sqlDelete);
-    
-}
-
     //Create new project
 if ($_POST) {
 
@@ -41,9 +26,22 @@ if ($_POST) {
     
     //? QUERY INSERT DATA IN DB
     $objconnection = new connection;
-     $sqlInsert = "INSERT INTO project(project_name, project_image, project_description) VALUES('$txtNameProject',' $fileImageProject','$txtDescriptionProject') ";
+     $sqlInsert = "INSERT INTO project(project_name, project_image, project_description) VALUES('$txtNameProject','$fileImageProject','$txtDescriptionProject') ";
      $objconnection->execSentences($sqlInsert);
 
+
+}
+
+if ($_GET) {
+    $id = $_GET['delete'];  
+    $objconnection = new connection;
+
+    $image = $objconnection->executeSentences("SELECT project_image FROM project WHERE id=$id" );
+    // echo ("Search Image" . $searchImage);
+    unlink("images/".$image[0]['project_image']);
+    
+    $sqlDelete = "DELETE FROM `project` WHERE `project`. `id`=".$id;
+    $objconnection->execSentences($sqlDelete);
 
 }
 
