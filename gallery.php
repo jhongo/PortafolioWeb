@@ -29,6 +29,8 @@ if ($_POST) {
      $sqlInsert = "INSERT INTO project(project_name, project_image, project_description) VALUES('$txtNameProject','$fileImageProject','$txtDescriptionProject') ";
      $objconnection->execSentences($sqlInsert);
 
+    header("location:gallery.php");
+
 
 }
 
@@ -42,6 +44,8 @@ if ($_GET) {
     // QUERY DELETE FROM APP
     $sqlDelete = "DELETE FROM `project` WHERE `project`. `id`=".$id;
     $objconnection->execSentences($sqlDelete);
+
+    header("location:gallery.php");
 
 }
 
@@ -72,17 +76,17 @@ $res = $objconnection->executeSentences($sqlSelect);
                     <label class="block text-gray-500 text-sm font-bold mb-2" for="username">
                         Name project
                     </label>
-                    <input name="nameProject" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name-project" type="text" placeholder="Name project">
+                    <input required name="nameProject" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name-project" type="text" placeholder="Name project">
                 </div>
 
 
                 <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-500">Description Project</label>
-                <textarea id="message" name="descriptionProject" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your description here..."></textarea>
+                <textarea required id="message" name="descriptionProject" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your description here..."></textarea>
 
                 
 
                     <label class="block mb-2 text-sm font-medium mt-2 text-gray-900 dark:text-GRAY-800" for="file_input">Cargar imagen</label>
-                    <input name="fileImage" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
+                    <input required name="fileImage" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
 
 
                 <div class="flex items-center justify-between mt-2 ">
@@ -94,7 +98,7 @@ $res = $objconnection->executeSentences($sqlSelect);
         </div>
 
 
-        <div class="relative overflow-x-auto bg-gray-300 shadow-md sm:rounded-lg">
+        <div class="overflow-y-auto" style="height: 550px;" >
             <table class="w-full text-sm text-left text-gray-00 dark:text-gray-100">
                 <thead class="text-xs text-gray-300 uppercase bg-gray-50 dark:bg-gray-300 dark:text-gray-700">
                     <tr>
@@ -129,7 +133,7 @@ $res = $objconnection->executeSentences($sqlSelect);
                         <?php echo($project['project_description']) ?>
                     </td>
                     <td class="px-6 py-4">
-                        <img src="images/<?php echo($project['project_image']) ?>" alt="Image project" srcset="">
+                        <img class="h-20 w-96" src="images/<?php echo($project['project_image']) ?>" alt="Image project" srcset="">
                         
                     
                     </td>
