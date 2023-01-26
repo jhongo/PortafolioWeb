@@ -37,9 +37,9 @@ if ($_GET) {
     $objconnection = new connection;
 
     $image = $objconnection->executeSentences("SELECT project_image FROM project WHERE id=$id" );
-    // echo ("Search Image" . $searchImage);
     unlink("images/".$image[0]['project_image']);
     
+    // QUERY DELETE FROM APP
     $sqlDelete = "DELETE FROM `project` WHERE `project`. `id`=".$id;
     $objconnection->execSentences($sqlDelete);
 
@@ -129,7 +129,9 @@ $res = $objconnection->executeSentences($sqlSelect);
                         <?php echo($project['project_description']) ?>
                     </td>
                     <td class="px-6 py-4">
-                        <?php echo($project['project_image']) ?>
+                        <img src="images/<?php echo($project['project_image']) ?>" alt="Image project" srcset="">
+                        
+                    
                     </td>
                     <td class="px-6 py-4 text-right">
                         <a href="?delete=<?php echo( $project['id']); ?>" class="font-medium text-blue-600 dark:text-green-600 hover:underline">Delete</a>
