@@ -1,8 +1,4 @@
-<?php
-
-use function PHPSTORM_META\map;
-
- include('header.php') ?>
+<?php include('header.php') ?>
 <?php include('connection.php')?>
 
 
